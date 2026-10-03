@@ -663,6 +663,8 @@ When the loop ends, it releases the framework resources.
 ## `hCell()`
 
 ```c
+typedef void (*hcellRule)(void *c[9], void *n[9]);
+
 void hCell(hcellRule rule);
 ```
 
@@ -682,14 +684,12 @@ Internally, it visits every cell, constructs its neighborhood, calls your rule, 
 ## `hRender()`
 
 ```c
+typedef HrdView (*hrdView)(const void *cell);
+
 void hRender(hrdView view);
 ```
 
 Renders the current state.
-
-```c
-hRender(view);
-```
 
 Your `view()` receives one cell at a time and returns an `HrdView`.
 
