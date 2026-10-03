@@ -59,7 +59,10 @@ HAYYOTH_LIB = $(BUILD)/src/libhayyoth.$(LIB_EXT)
 LAB_SRCS = $(wildcard lab/*.c)
 LAB_OUTS = $(patsubst lab/%.c,$(BUILD)/lab/%.out,$(LAB_SRCS))
 
-all: $(BUILD) $(CELL_LIB) $(RENDER_LIB) $(HAYYOTH_LIB) $(LAB_OUTS)
+LEARN_SRCS = $(wildcard learn/*.c)
+LEARN_OUTS = $(patsubst learn/%.c,$(BUILD)/learn/%.out,$(LEARN_SRCS))
+
+all: $(BUILD) $(CELL_LIB) $(RENDER_LIB) $(HAYYOTH_LIB) $(LAB_OUTS) $(LEARN_OUTS)
 
 $(BUILD):
 	mkdir -p $(BUILD)
@@ -69,6 +72,9 @@ $(BUILD)/src:
 
 $(BUILD)/lab:
 	mkdir -p $(BUILD)/lab
+
+$(BUILD)/learn:
+	mkdir -p $(BUILD)/learn
 
 $(BUILD)/src/hcell.o: src/hcell.c src/hcell.h | $(BUILD)/src
 	$(CC) $(CFLAGS) -Isrc -c $< -o $@
@@ -101,6 +107,13 @@ $(BUILD)/lab/%.out: lab/%.c $(HAYYOTH_LIB) | $(BUILD)/lab
 		-o $@ \
 		$(RPATH)
 
+$(BUILD)/learn/%.out: learn/%.c $(HAYYOTH_LIB) | $(BUILD)/learn
+	$(CC) $(CFLAGS) -Isrc $< \
+		-L$(BUILD)/src \
+		-lhayyoth \
+		-o $@ \
+		$(RPATH)
+
 test: all
 	@echo "All labs built successfully in $(BUILD)/lab/!"
 
@@ -109,6 +122,9 @@ compile-commands:
 
 run-%: $(BUILD)/lab/%.out
 	./$(BUILD)/lab/$*.out
+
+learn-%: $(BUILD)/learn/%.out
+	./$(BUILD)/learn/$*.out
 
 install: all
 	mkdir -p $(PREFIX)/lib $(PREFIX)/include
