@@ -89,6 +89,7 @@ int hrdRun(void) {
 static void terminal(const void *state, hrdView view) {
   const char *base = state;
   printf("\033[2J\033[H");
+  printf("\n");
   for (size_t y = 0; y < getHeight(); y++) {
     for (size_t x = 0; x < getWidth(); x++) {
       size_t index = y * getWidth() + x;
@@ -113,6 +114,7 @@ static void raylib(const void *state, hrdView view) {
       size_t index = y * getWidth() + x;
       const void *cell = base + index * getCellSize();
       HrdView res = view(cell);
+      if(!res.a) res.a = 255;
       store.pixels[index] =
           (Color){.r = res.r, .g = res.g, .b = res.b, .a = res.a};
     }
