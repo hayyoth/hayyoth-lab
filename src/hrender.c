@@ -2,6 +2,14 @@
 #include "raylib.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#ifdef _WIN32
+    #include <windows.h>
+    #define sleep_ms(ms) Sleep(ms)
+#else
+    #include <unistd.h>
+    #define sleep_ms(ms) usleep((ms) * 1000)
+#endif
 
 typedef struct {
   HrdConf conf;
@@ -58,7 +66,6 @@ int hrdSetup(HrdConf c) {
                    .height = getHeight(),
                    .mipmaps = 1,
                    .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8};
-    
     SetTargetFPS(getFps());
     store.texture = LoadTextureFromImage(image);
     if (!IsTextureValid(store.texture)) {
@@ -81,6 +88,7 @@ int hrdRun(void) {
 
 static void terminal(const void *state, hrdView view) {
   const char *base = state;
+  printf("\033[2J\033[H");
   for (size_t y = 0; y < getHeight(); y++) {
     for (size_t x = 0; x < getWidth(); x++) {
       size_t index = y * getWidth() + x;
@@ -94,7 +102,7 @@ static void terminal(const void *state, hrdView view) {
 
   fflush(stdout);
   if (getFps() > 0)
-    WaitTime(1.0 / getFps());
+    sleep_ms(1000/getFps());
 }
 
 static void raylib(const void *state, hrdView view) {
