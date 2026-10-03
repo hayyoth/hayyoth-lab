@@ -55,9 +55,9 @@ void rule(void *c[9], void *n[9]) {
 HrdView view(const void *cell) {
   const Cell *c = cell;
   if (*c)
-    return (HrdView){.r = 255, .g = 255, .b = 255, .a = 255, .s = "x"};
+    return (HrdView){.r = 255, .g = 255, .b = 255};
 
-  return (HrdView){.r = 0, .g = 0, .b = 0, .a = 255, .s = "  "};
+  return (HrdView){.r = 0, .g = 0, .b = 0};
 }
 
 int main(void) {
@@ -125,10 +125,10 @@ static HrdView view(const void *raw) {
   const Cell *c = raw;
 
   if (c->ant)
-    return (HrdView){255, 80, 80, 255, NULL};
+    return (HrdView){.r = 255, .g = 80, .b = 80};
   if (c->food)
-    return (HrdView){255, 180, 0, 255, NULL};
-  return (HrdView){0, 0, 0, 255, NULL};
+    return (HrdView){.r = 255, .g = 180, .b = 0};
+  return (HrdView){.r = 0, .g = 0, .b = 0};
 }
 
 int main(void) {
@@ -522,13 +522,12 @@ It simply decides how that cell should be represented.
 For a graphical renderer:
 
 ```c
-HrdView view(const void *raw) {
-  const Cell *cell = raw;
+HrdView view(const void *cell) {
+  const Cell *c = cell;
+  if (*c)
+    return (HrdView){.r = 255, .g = 255, .b = 255};
 
-  if (*cell)
-    return (HrdView){255, 255, 255, 255};
-
-  return (HrdView){0, 0, 0, 255};
+  return (HrdView){.r = 0, .g = 0, .b = 0};
 }
 ```
 
@@ -698,15 +697,51 @@ For GUI rendering:
 
 ```c
 HrdView view(const void *cell) {
-  return (HrdView){255, 255, 255, 255};
+  // a is the transparency; the default is 255.
+  return (HrdView){.r = 255, .g = 255, .b = 255, .a = 100};
+}
+```
+
+```c
+HrdView view(const void *raw) {
+  const Cell *cell = raw;
+  float v = cell->v;
+
+  // Map the concentration of substance V into vibrant graphic colors
+  // (from dark background to turquoise/bright white)
+  unsigned char val = (unsigned char)(v * 255.0f * 3.5f);
+  if (val > 255)
+    val = 255;
+
+  return (HrdView){.r = val / 5, .g = val, .b = 255};
 }
 ```
 
 For terminal rendering:
 
 ```c
+HrdConf rdConf = {.fps = 5, .isTerm = 1};
+```
+
+```c
 HrdView view(const void *cell) {
-  return (HrdView){.s = "x"};
+  const Cell *c = cell;
+  if (*c)
+    return (HrdView){.s = "x"};
+
+  return (HrdView){.s = " "};
+}
+```
+
+Outputting numerical values ​​to the terminal is very useful for debugging and monitoring.
+
+```c
+HrdView view(const void *cell) {
+  const Cell *c = cell;
+  static char buf[16];
+  snprintf(buf, sizeof(buf), "%4.0f ", *c);
+
+  return (HrdView){.s = buf};
 }
 ```
 
