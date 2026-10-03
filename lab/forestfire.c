@@ -61,11 +61,11 @@ HrdView view(const void *raw) {
 
   switch (*cell) {
   case TREE: // Green tree
-    return (HrdView){34, 139, 34, 255, ""};
+    return (HrdView){.r = 34, .g = 139, .b = 34};
   case FIRE: // Burning: Bright orange/red color
-    return (HrdView){255, 69, 0, 255, ""};
+    return (HrdView){.r = 255, .g = 69, .b = 0};
   default: // Empty land: Dark background
-    return (HrdView){20, 20, 20, 255, ""};
+    return (HrdView){.r = 20, .g = 20, .b = 20};
   }
 }
 

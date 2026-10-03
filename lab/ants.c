@@ -45,10 +45,10 @@ static HrdView view(const void *raw) {
   const Cell *c = raw;
 
   if (c->ant)
-    return (HrdView){255, 80, 80, 255, NULL};
+    return (HrdView){.r = 255, .g = 80, .b = 80};
   if (c->food)
-    return (HrdView){255, 180, 0, 255, NULL};
-  return (HrdView){0, 0, 0, 255, NULL};
+    return (HrdView){.r = 255, .g = 180, .b = 0};
+  return (HrdView){.r = 0, .g = 0, .b = 0};
 }
 
 int main(void) {

@@ -111,7 +111,7 @@ HrdView view(const void *raw) {
   if (val > 255)
     val = 255;
 
-  return (HrdView){.r = val / 5, .g = val, .b = 255, .a = 255};
+  return (HrdView){.r = val / 5, .g = val, .b = 255};
 }
 
 int main(void) {

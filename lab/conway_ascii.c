@@ -22,14 +22,14 @@ void rule(void *c[9], void *n[9]) {
 HrdView view(const void *cell) {
   const Cell *c = cell;
   if (*c)
-    return (HrdView){.r = 255, .g = 255, .b = 255};
+    return (HrdView){.s = "x"};
 
-  return (HrdView){.r = 0, .g = 0, .b = 0};
+  return (HrdView){.s = " "};
 }
 
 int main(void) {
-  HcellConf cellConf = {.width = 300, .height = 300, .cellSize = sizeof(Cell)};
-  HrdConf rdConf = {.fps = 15, .scale = 2};
+  HcellConf cellConf = {.width = 100, .height = 20, .cellSize = sizeof(Cell)};
+  HrdConf rdConf = {.fps = 5, .isTerm = 1};
   if (!hSetup(cellConf, rdConf))
     return 1;
 
