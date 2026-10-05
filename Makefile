@@ -111,6 +111,8 @@ $(BUILD)/learn/%.out: learn/%.c $(HAYYOTH_LIB) | $(BUILD)/learn
 	$(CC) $(CFLAGS) -Isrc $< \
 		-L$(BUILD)/src \
 		-lhayyoth \
+		-lhcell \
+		-lhrender \
 		-o $@ \
 		$(RPATH)
 

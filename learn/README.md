@@ -1,0 +1,1 @@
+This directory is for practice purposes; it also contains AI-generated code.

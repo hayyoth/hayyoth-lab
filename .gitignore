@@ -1,6 +1,5 @@
 build/
 .cache/
-learn/
 compile_commands.json
 
 # Prerequisites
