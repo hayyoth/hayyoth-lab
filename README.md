@@ -188,55 +188,15 @@ You may begin with a handful of simple interactions and discover structures that
 
 Hayyoth is therefore intended as a laboratory rather than a conventional application framework.
 
-Build something small.
-
-Run it.
-
-Observe it.
-
-Change the rules.
-
-Run it again.
-
 ---
 
 ## Installation
 
-Hayyoth uses a small Makefile-based build system.
-
 ### Dependencies
 
-You need:
+Requires a POSIX environment with a C compiler, `make`, `pkg-config`, and [raylib](https://www.raylib.com/).
 
-* a C compiler (`cc`, `clang`, or `gcc`)
-* `make`
-* `pkg-config`
-* [raylib](https://www.raylib.com/)
-
-The Makefile uses `pkg-config` to locate raylib.
-
-### Build
-
-From the project directory:
-
-```sh
-make
-```
-
-It then builds the Hayyoth libraries and every experiment in `lab/`.
-
-The generated files are placed under:
-
-```text
-build/
-├── src/
-│   ├── libhcell.*
-│   ├── libhrender.*
-│   └── libhayyoth.*
-└── lab/
-    ├── ants.out
-    └── conway.out
-```
+Windows users can use WSL or another POSIX-compatible environment.
 
 ### Run a Lab
 
@@ -264,6 +224,23 @@ for an experiment named:
 
 ```text
 lab/<name>.c
+```
+
+### Install Library
+
+From the project directory, build and install Hayyoth:
+
+```sh
+make
+sudo make install
+```
+
+This installs the Hayyoth libraries and headers under `/usr/local`.
+
+Use Hayyoth from another C project:
+
+```sh
+cc main.c -lhayyoth -o main
 ```
 
 ---

@@ -3,13 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
-    #include <windows.h>
-    #define sleep_ms(ms) Sleep(ms)
-#else
-    #include <unistd.h>
-    #define sleep_ms(ms) usleep((ms) * 1000)
-#endif
+#include <time.h>
 
 typedef struct {
   HrdConf conf;
@@ -84,6 +78,13 @@ int hrdRun(void) {
     return 0;
 
   return 1;
+}
+
+void sleep_ms(unsigned ms) {
+  struct timespec ts = {.tv_sec = ms / 1000,
+                        .tv_nsec = (long)(ms % 1000) * 1000000L};
+
+  nanosleep(&ts, NULL);
 }
 
 static void terminal(const void *state, hrdView view) {

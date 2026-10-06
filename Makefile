@@ -22,34 +22,17 @@ BUILD = build
 
 UNAME_S ?= $(shell uname -s)
 
-ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
-    WINDOWS = 1
-else ifeq ($(findstring MSYS,$(UNAME_S)),MSYS)
-    WINDOWS = 1
-else ifeq ($(findstring CYGWIN,$(UNAME_S)),CYGWIN)
-    WINDOWS = 1
-else ifeq ($(OS),Windows_NT)
-    WINDOWS = 1
-endif
-
-ifdef WINDOWS
-    LIB_EXT = dll
-    SHARED = -shared
-    RPATH =
-    LIB_RPATH =
-
+ifeq ($(UNAME_S),Darwin)
+    LIB_EXT = dylib
+    SHARED = -dynamiclib
+    RPATH = -Wl,-rpath,@loader_path/../src
+    LIB_RPATH = -Wl,-rpath,@loader_path
 else
-    ifeq ($(UNAME_S),Darwin)
-        LIB_EXT = dylib
-        SHARED = -dynamiclib
-        RPATH = -Wl,-rpath,@loader_path/../src
-        LIB_RPATH = -Wl,-rpath,@loader_path
-    else
-        LIB_EXT = so
-        SHARED = -shared
-        RPATH = -Wl,-rpath,'$$ORIGIN/../src'
-        LIB_RPATH = -Wl,-rpath,'$$ORIGIN'
-    endif
+    # Linux, WSL, Cygwin, etc.
+    LIB_EXT = so
+    SHARED = -shared
+    RPATH = -Wl,-rpath,'$$ORIGIN/../src'
+    LIB_RPATH = -Wl,-rpath,'$$ORIGIN'
 endif
 
 CELL_LIB    = $(BUILD)/src/libhcell.$(LIB_EXT)
